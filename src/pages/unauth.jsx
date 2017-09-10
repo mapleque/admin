@@ -7,18 +7,23 @@ import ForgotForm from './unauth/register'
 
 const { Content, Footer } = Layout;
 
-export default () => (
-  <Layout style={{background:'#fff'}}>
-    <h1 className="login-form-title">Mapleque Admin</h1>
-    <Content style={{padding: 50, margin: 'auto', textAlign: 'certer'}}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/register" component={RegisterForm}/>
-          <Route path="/forgot" component={ForgotForm}/>
-          <Route path="/" component={LoginForm}/>
-        </Switch>
-      </BrowserRouter>
-    </Content>
-    <Footer style={{ textAlign: 'center' }}>Admin ©{new Date().getFullYear()} Created by Mapleque</Footer>
-  </Layout>
-)
+class Unauth extends Component {
+  render () {
+    return (
+      <Layout style={{background:'#fff'}}>
+        <h1 className="login-form-title">Mapleque Admin</h1>
+        <Content style={{padding: 50, margin: 'auto', textAlign: 'certer'}}>
+          <BrowserRouter>
+            <Switch>
+              <Route path="/register" component={RegisterForm}/>
+              <Route path="/forgot" component={ForgotForm}/>
+              <Route path="/" component={LoginForm}/>
+            </Switch>
+          </BrowserRouter>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>Admin ©{new Date().getFullYear()} Created by Mapleque</Footer>
+      </Layout>
+    )
+  }
+}
+export default Unauth

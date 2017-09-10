@@ -1,28 +1,71 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
-import { Layout, Breadcrumb, Icon } from 'antd'
+import { withRouter, Switch, Route } from 'react-router-dom'
+import { Layout } from 'antd'
+import User from './common/user'
 import Menu from './common/menu'
+import Breadcrumb from './common/breadcrumb'
 
-import AdminApi from '../api/admin'
-const { Header, Footer, Content, Sider } = Layout;
-const SubMenu = Menu.SubMenu;
+const { Footer, Content, Sider } = Layout;
 
 class Authed extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      collapsed: false
+      collapsed: false,
+      nav: {} // bind privilege, use for menus and breadcrumb
     }
+  }
+  componentDidMount () {
+    const nav = {
+      label: 'Home',
+      icon: 'home',
+      path: '/',
+      childs: [{
+        label: 'Settings',
+        icon: 'tool',
+        path: '/settings',
+        childs: [{
+          label: 'System',
+          icon: 'api',
+          path: '/settings/system'
+        }, {
+          label: 'Search',
+          icon: 'search',
+          path: '/settings/search'
+        }]
+      }, {
+        label: 'User Center',
+        icon: 'usergroup-add',
+        path: '/users',
+        childs: [{
+          label: 'Search',
+          icon: 'search',
+          path: '/users/search'
+        }]
+      }, {
+        label: 'Oauth Center',
+        icon: 'tags',
+        path: '/oauth',
+        childs: [{
+          label: 'Clients',
+          icon: 'tag',
+          path: '/oauth/clients'
+        }]
+      }, {
+        label: 'Statistic',
+        icon: 'area-chart',
+        path: '/stat',
+        childs: [{
+          label: 'QPS',
+          icon: 'tag',
+          path: '/stat/qps'
+        }]
+      }]
+    }
+    this.setState({nav: nav})
   }
   handleCollapse = () => {
     this.setState({collapsed: !this.state.collapsed})
-  }
-  handleLogout = () => {
-    console.log(this.props)
-    AdminApi.logout().then(res=>{
-      this.props.history.push('/')
-      window.location.reload()
-    })
   }
   render () {
     return (
@@ -32,16 +75,20 @@ class Authed extends Component {
           onCollapse={this.handleCollapse}
           breakpoint="lg"
         >
-          <Menu />
+          <User user={this.props.user}/>
+          <Menu nav={this.state.nav}/>
         </Sider>
-        <Layout style={{ height:'100vh', overflowY: 'scroll' }}>
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '12px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
+        <Layout style={{ minHeight:'100vh' }}>
+          <Content style={{ margin: '0 16px'}}>
+            <Breadcrumb location={this.props.location} nav={this.state.nav}/>
             <div style={{ padding: 24, background: '#fff' }}>
-              Bill is a cat.
+              <Switch>
+                <Route exact path="/" component={() => <div>home</div>}/>
+                <Route path="/settings" component={() => <div>settings</div>}/>
+                <Route path="/user" component={() => <div>user</div>}/>
+                <Route path="/oauth" component={() => <div>oauth</div>}/>
+                <Route path="/stat" component={() => <div>stat</div>}/>
+              </Switch>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Admin ©{new Date().getFullYear()} Created by Mapleque</Footer>
