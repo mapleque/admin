@@ -4,7 +4,7 @@ import { Layout } from 'antd'
 import User from './common/user'
 import Menu from './common/menu'
 import Breadcrumb from './common/breadcrumb'
-
+import Settings from './settings'
 const { Footer, Content, Sider } = Layout;
 
 class Authed extends Component {
@@ -84,7 +84,7 @@ class Authed extends Component {
             <div style={{ padding: 24, background: '#fff' }}>
               <Switch>
                 <Route exact path="/" component={() => <div>home</div>}/>
-                <Route path="/settings" component={() => <div>settings</div>}/>
+                <Route path="/settings" component={Settings}/>
                 <Route path="/user" component={() => <div>user</div>}/>
                 <Route path="/oauth" component={() => <div>oauth</div>}/>
                 <Route path="/stat" component={() => <div>stat</div>}/>
